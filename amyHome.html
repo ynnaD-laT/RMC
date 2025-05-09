@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <! specifies the character encoding for the document to be UTF-8 >
+    <meta charset="UTF-8" />
+    <! sets the viewport properties for responsive web design, ensuring that the webpage is rendered properly on different devices and screen sizes >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <! brief description of the webpage, but it's currently empty >
+    <meta name="description" content="" />
+    <! links an external CSS file named "style.css" to the HTML document for styling purposes >
+
+    <link rel="stylesheet" href="/static/style.css" />
+
+    <title>Rate My Course</title>
+    <style>
+      .button {
+        border: none;
+        color: white;
+        background-color: #2476f0;
+        padding: 15px 40px;
+        margin: 20px 10px;
+        font-size: 18px;
+        cursor: pointer;
+        border-radius: 25px;
+        text-decoration: none;
+      }
+
+      .button:hover {
+        background-color: #1a4ca8;
+      }
+
+      p {
+        color: #003366;
+        font-size: 18px;
+        margin: 20px;
+        line-height: 1.5;
+      }
+
+      /* Container styles */
+      #popup-link-container {
+        margin-top: 10px; /* Add margin to move the link down */
+        text-align: center;
+      }
+
+      /* Link styles */
+      #popup-link {
+        color: #003366;
+        text-decoration: underline;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      /* Popup styles (same as before) */
+      .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(
+          0,
+          0,
+          0,
+          0.5
+        ); /* Semi-transparent black overlay */
+        display: none;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .popup-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 80%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <img
+      id="Logo"
+      src="{{url_for('static', filename='Logo.jpg')}}"
+      alt="an image of Rate My Course Logo "
+    />
+
+    <h1>Welcome to Rate My Course</h1>
+
+    <!-- Container for the link -->
+    <div id="popup-link-container">
+      <!-- Link to trigger the popup -->
+      <a href="#" id="popup-link" onclick="togglePopup()"
+        >A little message from us to you!</a
+      >
+    </div>
+
+    <!-- Popup container (same as before) -->
+    <div class="popup-overlay" id="popupOverlay">
+      <div class="popup-content">
+        <p
+          style="
+            font-size: 18px;
+            color: #003366;
+            margin: 20px;
+            line-height: 1.5;
+          "
+        >
+          Welcome to <strong style="color: #2476f0">Rate My Course</strong>,
+          where we believe every student deserves a voice in their educational
+          journey. Step into our vibrant online forum, where your experiences
+          matter and your insights shine. Our platform is your virtual campus, a
+          place filled with collective wisdom of students like you. Whether
+          you're charting your course for the semester ahead or reflecting on
+          past adventures, our star ratings and reviews ensure every step of
+          your academic journey is informed and inspired. Join us today!
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Function to toggle the visibility of the popup
+      function togglePopup() {
+        var popup = document.getElementById("popupOverlay");
+        popup.style.display =
+          popup.style.display === "none" || popup.style.display === ""
+            ? "flex"
+            : "none";
+      }
+
+      // Close the popup when clicking outside of it
+      window.addEventListener("click", function (event) {
+        var popup = document.getElementById("popupOverlay");
+        if (event.target === popup) {
+          popup.style.display = "none";
+        }
+      });
+    </script>
+
+    <div class="container">
+      <form method="POST">
+        <div>
+          {% block content%}
+          <h2>Sign in</h2>
+          <label for="email"> Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Ex:smithj@montclair.edu"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="password"> Password:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Ex:password123!"
+            maxlength="12"
+            required
+          />
+        </div>
+        <input type="submit" />
+      </form>
+
+      <div class="account-text">
+        <p style="color: #000000">Don't Have An Account?</p>
+      </div>
+      <p style="text-align: center">
+        <a href="/registor">Sign Up</a>
+      </p>
+    </div>
+
+    {% endblock %}
+  </body>
+</html>

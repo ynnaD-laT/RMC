@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Font Awesome Icon Library -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="/static/resultsStyle.css" />
+    <link rel="stylesheet" href="/static/resultsCalcStyle.css" />
+
+  
+    <title>Results</title>
+    <style></style>
+  </head>
+  <body>
+    <img
+      id="Logo"
+      src="{{url_for('static', filename='Logo.jpg')}}"
+      alt="an image of Rate My Course Logo "
+    />
+    <div class="logout">
+      <a href="logout">Log Out</a>
+    </div>
+    <div class="account">
+      <a href="about">My Account</a>
+    </div>
+    <! used for solid line>
+    <p class="solid"></p>
+    <! used for select box>
+    <div class="custom-select" style="width: 200px">
+      <select id="courseSelect">
+        <option value="0">Select a course:</option>
+        <option value="1">CSIT</option>
+        <option value="2">BIOL</option>
+        <option value="3">ENGL</option>
+        <option value="4">HIST</option>
+      </select>
+    </div>
+    <div id = "demo"></div>
+   
+
+  <script>
+    /* used for rate and comment buttons*/
+      // RATE
+      // Function to open the modal
+      function openModal() {
+        document.getElementById("myModal").style.display = "block";
+      }
+
+  // Function to close the modal
+  function closeModal() {
+    document.getElementById("myModal").style.display = "none";
+  }
+
+  // Function to handle star rating
+  function rateStar(stars) {
+    var starElements = document.getElementsByClassName("fa-star");
+
+    // Update the color of stars based on user's selection
+    for (var i = 0; i < starElements.length; i++) {
+      if (i < stars) {
+        starElements[i].classList.add("checked");
+      } else {
+        starElements[i].classList.remove("checked");
+      }
+    }
+  }
+
+// COMMENT
+  // Function to toggle the visibility of the comment form
+  function toggleForm() {
+    var container = document.getElementById("commentContainer");
+    container.style.display =
+      container.style.display === "none" ? "block" : "none";
+  }
+// Function to handle form submission
+  document.getElementById("commentForm").addEventListener("submit", function (event) {
+  event.preventDefault(); // Prevent default form submission
+
+  var comment = document.getElementById("comment").value;
+  var currentDate = new Date().toLocaleDateString(); // Get the current date
+
+  // Create a new comment element
+  var newComment = document.createElement("div");
+  newComment.innerHTML =
+    "<strong>" + currentDate + "</strong><br>" + comment + "<hr>";
+
+  // Append the new comment to the comments container
+  document.getElementById("commentsContainer").appendChild(newComment);
+
+  // Clear the form fields
+  document.getElementById("comment").value = "";
+});
+
+/* STARS CALC */ 
+/* generates dynamically */
+/* assign array that is called data, dynamic */
+  let data = [
+    {
+      star: 5,
+      count: 99980,
+    },
+    {
+      star: 4,
+      count: 39300,
+    },
+    {
+      star: 3,
+      count: 25050,
+    },
+    {
+      star: 2,
+      count: 10070,
+    },
+    {
+      star: 1,
+      count: 5020,
+    },
+  ];
+
+  let total_rating = 0;
+  rating_based_on_stars = 0;
+  /* */
+  data.forEach((rating) => {
+    total_rating += rating.count;
+    /* gives you exact number of stars rating*/
+    rating_based_on_stars += rating.count * rating.star;
+  });
+
+  /* declare data with rating that represents each indiv element*/
+  /* `` lets you manipulate string and variables*/
+  data.forEach((rating) => {
+    let rating_progress = `
+    <div class="rating_progress-value">
+      <! $ makes it dynamic which lets you pass variables>
+        <p>${rating.star}<span class="star">&#9733;</span></p>
+        <div class="progress">
+          <div class="bar" style= "width: ${
+            (rating.count / total_rating) * 100
+          }%"></div>
+        </div>
+        <! converst num to string and after three digits places comma>
+        <p>${rating.count.toLocaleString()}</p>
+    </div>
+    `;
+    /* selects div class name, and inserts dynamic code to variable*/
+    /* += appends diff elements to class name*/
+    document.querySelector(".rating_progress").innerHTML += rating_progress;
+  });
+  /* generate avergage rating from diff star rating values */
+  let rating_average = (rating_based_on_stars / total_rating).toFixed(1);
+  /* total rating dynamic*/
+  document.querySelector(".rating_average h1").innerHTML = rating_average;
+  document.querySelector(".rating_average p").innerHTML =
+    total_rating.toLocaleString();
+  document.querySelector(".star-inner").style.width =
+    (rating_average / 5) * 100 + "%";
+
+
+  </script>
+
+
+      
+    </script>
+    
+    <! used for search bar >
+    <form class="example" method = "GET">
+      <input type="text" placeholder="Search.." name="search" />
+      <button type="submit"><i class="fa fa-search"></i></button>
+    </form>
+
+    <! for adjusting course and star calc>
+    <div class="wrapper">
+      <div class="textContainer" id="rcorners">
+        <p>
+          {%if resultSearch %}
+          <p> Course name: {{resultSearch['name']}}</p>
+          <p> Course ID: {{resultSearch['id']}} </p>
+          <p> Course Desc: {{resultSearch['courseDesc']}} </p>
+          <p></p>
+          {% else %}
+            <h1> Course Not Found</h1>
+            
+          {% endif %}
+
+        </p>
+      </div>
+      <div class="ratingWrap">
+        <div class="app">
+          <div class="rating">
+            <div class="rating_average">
+              <! average rating>
+              <h1>4.5</h1>
+              <div class="star-outer">
+                <! &#9733 star icon>
+                <div class="star-inner"></div>
+              </div>
+              <! number of ratings>
+              <p>290,291</p>
+            </div>
+            <div class="rating_progress"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <! for adjusting buttons>
+    <div class="buttonsContainer">
+      <div class="button-comments-container">
+        <div class="button-container">
+          <div class="rateButton-container">
+            <button class="rate-button" onclick="openModal()">Rate</button>
+          </div>
+          <div class="commentButton-container">
+            <button class="comment-button" onclick="toggleForm()">
+              Comment
+            </button>
+
+            <div class="comment-container" id="commentContainer">
+              <h3>Tell Us Your Thoughts!</h3>
+              <form id="commentForm" method="POST">
+                <label for="comment">Comment:</label>
+                <textarea
+                  id="commentForm"
+                  name="commentForm"
+                  placeholder="Leave a comment.."
+                  style="height: 100px"
+                ></textarea>
+                <input type="submit" value="Submit" />
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <! display comments>
+      <div class="displayCommmentContainer" id="c-corners">
+        {% if commentsLog %}
+        {% for row in commentsLog %}
+            {% if row['courseID'] == resultSearch['id'] %}
+                <p> 
+                    Username: {{ row['userName'] }} <br>
+                    Comment: {{ row['commentTxt'] }}
+                </p>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <h1>Nothing New! </h1>
+    {% endif %}
+      </div>
+
+      <! rate >
+      <! Button to open the modal >
+      <! The Modal >
+      <div id="myModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal()">&times;</span>
+          <h2>How Many Stars Would You Rate This Course?</h2>
+          <div id="stars">
+            <span class="fa fa-star" onclick="rateStar(1)"></span>
+            <span class="fa fa-star" onclick="rateStar(2)"></span>
+            <span class="fa fa-star" onclick="rateStar(3)"></span>
+            <span class="fa fa-star" onclick="rateStar(4)"></span>
+            <span class="fa fa-star" onclick="rateStar(5)"></span>
+          </div>
+          <button onclick="submitRating()">Submit</button>
+          
+          <script>
+            function myFunction() {
+              confirm("Rating Submitted!");
+            }
+            </script>
+        </div>
+      </div>
+
+ 
+
+    </div>
+  </body>
+</html>

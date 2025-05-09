@@ -1,0 +1,7 @@
+{% extends 'amySearch.html' %}
+{% block title %}View All Requested Courses{% endblock %} 
+{%block content%}
+    {%for item in values%}
+        <p>Course: {{item.course_name}}, Email:  {{item.contact_email}}</p>
+    {% endfor %}
+{%endblock %}

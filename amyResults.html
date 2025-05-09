@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Font Awesome Icon Library -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="/static/resultsStyle.css" />
+    <link rel="stylesheet" href="/static/resultsCalcStyle.css" />
+    
+    <title>Results</title>
+    <style>
+      .loggerouter {
+        float: right;
+      }
+    </style>
+  </head>
+  <body>
+    <body>
+      <img
+        id="Logo"
+        src="{{url_for('static', filename='Logo.jpg')}}"
+        alt="an image of Rate My Course Logo "
+      />
+      <form method="POST" id="logout">
+        <div class="loggerouter">
+          <a href="logout">Log Out</a>
+        </div>
+        {% block content %}
+  
+        <div class="account">
+          <a href="about">My Account</a>
+        </div>
+      </form>
+  
+      <! used for solid line>
+      <p class="solid"></p>
+  
+      <! used for select box>
+      <h1>Look up any course</h1>
+      <div class="custom-select" style="width: 200px">
+        <select id="courseSelect">
+          <option value="0">Select a course:</option>
+          <option value="1">CSIT</option>
+          <option value="2">BIOL</option>
+          <option value="3">ENGL</option>
+          <option value="4">HIST</option>
+        </select>
+      </div>
+      <form class="example" method="GET">
+        <input type="text" placeholder="Search.." name="search" id="search" />
+        <button type="submit"><i class="fa fa-search"></i></button>
+      </form>
+  
+      <div id="demo"></div>
+      <script>
+        var x, i, j, l, ll, selElmnt, a, b, c;
+        /*look for any elements with the class "custom-select":*/
+        x = document.getElementsByClassName("custom-select");
+        l = x.length;
+        for (i = 0; i < l; i++) {
+          selElmnt = x[i].getElementsByTagName("select")[0];
+          ll = selElmnt.length;
+          /*for each element, create a new DIV that will act as the selected item:*/
+          a = document.createElement("DIV");
+          a.setAttribute("class", "select-selected");
+          a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+          x[i].appendChild(a);
+          /*for each element, create a new DIV that will contain the option list:*/
+          b = document.createElement("DIV");
+          b.setAttribute("class", "select-items select-hide");
+          for (j = 1; j < ll; j++) {
+            /*for each option in the original select element,
+              create a new DIV that will act as an option item:*/
+            c = document.createElement("DIV");
+            c.innerHTML = selElmnt.options[j].innerHTML;
+            c.addEventListener("click", function (e) {
+              /*when an item is clicked, update the original select box,
+                  and the selected item:*/
+              var y, i, k, s, h, sl, yl;
+              s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+              sl = s.length;
+              h = this.parentNode.previousSibling;
+              for (i = 0; i < sl; i++) {
+                if (s.options[i].innerHTML == this.innerHTML) {
+                  s.selectedIndex = i;
+                  h.innerHTML = this.innerHTML;
+                  y = this.parentNode.getElementsByClassName("same-as-selected");
+                  yl = y.length;
+                  for (k = 0; k < yl; k++) {
+                    y[k].removeAttribute("class");
+                  }
+                  this.setAttribute("class", "same-as-selected");
+                  //Holder
+                  //     var selectedOption = this.innerHTML
+                  //     console.log(selectedOption)
+  
+                  var selectElement = document.getElementById("courseSelect");
+                  selectElement.addEventListener("change", function (event) {
+                    var selectedOption = event.target.value;
+                    console.log(selectedOption); // Print selected option to console
+                  });
+                  console.log("This is the stored value", this.innerHTML);
+                  console.log("This ran");
+                  sel = this.innerHTML;
+                  //---------------------------------------------------------------------
+                  // Construct the JSON object
+                  var requestData = { table: sel, limit: 20 };
+  
+                  // Create a new XMLHttpRequest object
+                  var xmlhttp = new XMLHttpRequest();
+  
+                  // Define the onload function to handle the response
+                  xmlhttp.onload = function () {
+                    // Check if the response is successful
+                    if (xmlhttp.status == 200) {
+                      // Parse the JSON response
+                      const json = '{"CSIT":{"Software Engineer":"400", "Discrete Mathematics":170},' +
+                                    '"ENGL":{"World Literature":"103", "Intro Literature":"111"}, ' +
+                                    '"HIST":{"Macroeconomics":"102", "American Studies":"110"}, ' +
+                                    '"BIOL":{"Life Science":"200", "Organism Diversity":"202"}}';
+
+                      var myObj = JSON.parse(json);
+  
+                      // Process the JSON data and update the UI
+                      let text = "<table border='1'>";
+                      text +=
+                        "<tr><td>" +
+                        "Course Name" +
+                        "|" +
+                        "Course ID" +
+                        "</td></tr>";
+                      for (let x in myObj) {
+                        //WIP
+                        if (x == sel) {
+                          for (let resultP in x) {
+                            if (Object.values(myObj[x])[resultP] == undefined) {
+                              continue;
+                            }
+                            text +=
+                              "<tr><td>" +
+                              Object.keys(myObj[x])[resultP] +
+                              "|" +
+                              Object.values(myObj[x])[resultP] +
+                              "</td></tr>";
+                          }
+                        }
+                        //text += "<tr><td>" + myObj[x] + "</td></tr>";
+                      }
+                      text += "</table>";
+                      document.getElementById("demo").innerHTML = text;
+                    } else {
+                      // Handle error if the request is not successful
+                      console.error("Error occurred:", xmlhttp.statusText);
+                    }
+                  };
+  
+                  // // Open the request with POST method and specify the URL
+                  xmlhttp.open("POST", "home");
+  
+                  // Set the request header
+                  xmlhttp.setRequestHeader("Content-type", "application/json");
+  
+                  // Send the JSON data in the request body
+                  xmlhttp.send(JSON.stringify(requestData));
+  
+                  break;
+                }
+              }
+              h.click();
+            });
+            b.appendChild(c);
+          }
+          x[i].appendChild(b);
+          a.addEventListener("click", function (e) {
+            /*when the select box is clicked, close any other select boxes,
+                and open/close the current select box:*/
+            e.stopPropagation();
+            closeAllSelect(this);
+            this.nextSibling.classList.toggle("select-hide");
+            this.classList.toggle("select-arrow-active");
+          });
+        }
+        function closeAllSelect(elmnt) {
+          /*a function that will close all select boxes in the document,
+            except the current select box:*/
+          var x,
+            y,
+            i,
+            xl,
+            yl,
+            arrNo = [];
+          x = document.getElementsByClassName("select-items");
+          y = document.getElementsByClassName("select-selected");
+          xl = x.length;
+          yl = y.length;
+          for (i = 0; i < yl; i++) {
+            if (elmnt == y[i]) {
+              arrNo.push(i);
+            } else {
+              y[i].classList.remove("select-arrow-active");
+            }
+          }
+          for (i = 0; i < xl; i++) {
+            if (arrNo.indexOf(i)) {
+              x[i].classList.add("select-hide");
+            }
+          }
+        }
+        /*if the user clicks anywhere outside the select box,
+          then close all select boxes:*/
+        document.addEventListener("click", closeAllSelect);
+      </script>
+  
+      {% endblock %}
+  
+    <! for adjusting course and star calc>
+    <div class="wrapper">
+      <div class="textContainer" id="rcorners">
+        <p>
+          {%if resultSearch %}
+          <p> Course name: {{resultSearch['name']}}</p>
+          <p> Course ID: {{resultSearch['id']}} </p>
+          <p> Course Desc: {{resultSearch['courseDesc']}} </p>
+          <p></p>
+          {% else %}
+            <h1> Course Not Found</h1>
+            
+          {% endif %}
+
+        </p>
+      </div>
+
+      <div class="ratingWrap">
+        <div class="app">
+          <div class="rating">
+            <div class="rating_average">
+              <! average rating>
+
+
+
+                {%if ratingTotal %}
+                <h1>
+                  {{ "%.2f" | format(ratingTotal) }}  / 5
+                </h1>
+                {% else %}
+                <h1>No Rating</h1>
+                {% endif %}
+            
+           
+          
+            </div>
+            <div class="rating_progress"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <! for adjusting buttons>
+    <div class="buttonsContainer">
+      <div class="button-comments-container">
+        <div class="button-container">
+          <div class="rateButton-container">
+            <button class="rate-button" onclick="openModal()">Rate</button>
+          </div>
+          <div class="commentButton-container">
+            <button class="comment-button" onclick="toggleForm()">
+              Comment
+            </button>
+
+            <div class="comment-container" id="commentContainer">
+              <h3>Tell Us Your Thoughts!</h3>
+              <form id="commentForm" method="POST">
+                <label for="comment">Comment:</label>
+                <textarea
+                  id="commentForm"
+                  name="commentForm"
+                  placeholder="Leave a comment.."
+                  style="height: 100px"
+                ></textarea>
+                <input type="submit" />
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <! display comments>
+      <div class="displayCommmentContainer" id="c-corners">
+        {% if commentsLog %}
+        {% for row in commentsLog %}
+            {% if row['courseID'] == resultSearch['id'] %}
+                <p> 
+                    Username: {{ row['userName'] }} <br>
+                    Comment: {{ row['commentTxt'] }}
+                </p>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <h1>Nothing New! </h1>
+    {% endif %}
+      </div>
+
+
+
+      <! rate >
+      <! Button to open the modal >
+      <! The Modal >
+      <!-- Your existing HTML code -->
+      <div id="myModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeModal()">&times;</span>
+          <h2>How Many Stars Would You Rate This Course?</h2>
+          <div id="stars">
+            <span class="fa fa-star" onclick="rateStar(1)"></span>
+            <span class="fa fa-star" onclick="rateStar(2)"></span>
+            <span class="fa fa-star" onclick="rateStar(3)"></span>
+            <span class="fa fa-star" onclick="rateStar(4)"></span>
+            <span class="fa fa-star" onclick="rateStar(5)"></span>
+          </div>
+          <button onclick="myFunction()">Submit</button>
+
+          <!-- <script>
+          function myFunction() {
+            confirm("Rating Submitted!");
+          } -->
+          </script>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    /* used for rate and comment buttons*/
+  // RATE
+  // Function to open the modal
+  function openModal() {
+    document.getElementById("myModal").style.display = "block";
+  }
+
+// Function to close the modal
+function closeModal() {
+document.getElementById("myModal").style.display = "none";
+}
+
+
+
+// COMMENT
+  // Function to toggle the visibility of the comment form
+  function toggleForm() {
+    var container = document.getElementById("commentContainer");
+    container.style.display =
+      container.style.display === "none" ? "block" : "none";
+  }
+
+
+</script>
+  </body>
+</html>

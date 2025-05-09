@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+    <style>
+      .list {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      .list-item {
+        background-color: #f9f9f9;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .list-item p {
+        margin: 0;
+      }
+
+      .admin-actions {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .admin-actions button {
+        background-color: #f44336;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        margin-right: 10px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      .admin-actions button:hover {
+        background-color: #d32f2f;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .success-message {
+        background-color: rgba(36, 118, 240, 0.932);
+        color: white;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        text-align: center;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <img
+      id="Logo"
+      src="{{url_for('static', filename='Logo.jpg')}}"
+      alt="an image of Rate My Course Logo "
+    />
+ 
+    <div class="container">
+      <h1>Admin Panel</h1>
+      <div class="AdminHome">
+        <a href="AdminHome">AdminHome</a>
+      </div>
+
+      <div class="section hidden" id="comments-section">
+        <h3>Recent Comments</h3>
+        <ul class="list" id="comments-list"></ul>
+      </div>
+
+      <div class="section hidden" id="courses-section">
+        <h3>Previously Added Courses</h3>
+        <ul class="list" id="courses-list"></ul>
+      </div>
+
+      <div class="section hidden" id="add-course-section">
+        <h3>Add New Course</h3>
+        <form id="add-course-form">
+          <label for="course-name">Course Name:</label>
+          <input type="text" id="course-name" name="course-name" required />
+
+          <label for="professor-name">Professor Name:</label>
+          <input
+            type="text"
+            id="professor-name"
+            name="professor-name"
+            required
+          />
+
+          <input type="submit" value="Add Course" />
+        </form>
+      </div>
+
+      <div class="admin-actions hidden" id="admin-actions">
+        <button id="delete-comments-btn">Delete Comments</button>
+        <button id="delete-course-btn">Delete Course</button>
+        <button id="add-course-toggle-btn">Add New Course</button>
+      </div>
+
+      <div class="success-message" id="success-message"></div>
+    </div>
+
+    <script>
+      // Mock data for demonstration
+      var commentsData = [
+        { id: 1, text: "Great course!", date: "2024-04-15" },
+        { id: 2, text: "Could be better", date: "2024-04-14" },
+        { id: 3, text: "I learned a lot", date: "2024-04-13" },
+      ];
+
+      var coursesData = [
+        { id: 1, name: "Mathematics", professor: "John Doe" },
+        { id: 2, name: "Physics", professor: "Jane Smith" },
+        { id: 3, name: "Biology", professor: "David Johnson" },
+      ];
+
+      // Display comments on page load
+      window.onload = function () {
+        document.getElementById("comments-section").classList.remove("hidden");
+        document.getElementById("courses-section").classList.remove("hidden");
+        document.getElementById("admin-actions").classList.remove("hidden");
+        displayComments();
+        displayCourses();
+      };
+
+      // Function to display comments
+      function displayComments() {
+        var commentsList = document.getElementById("comments-list");
+        commentsList.innerHTML = "";
+        commentsData.forEach(function (comment) {
+          var listItem = document.createElement("li");
+          listItem.classList.add("list-item");
+          listItem.innerHTML = `<p>${comment.text}</p><button class="delete-comment-btn" data-id="${comment.id}">Delete</button>`;
+          commentsList.appendChild(listItem);
+        });
+      }
+
+      // Function to display courses
+      function displayCourses() {
+        var coursesList = document.getElementById("courses-list");
+        coursesList.innerHTML = "";
+        coursesData.forEach(function (course) {
+          var listItem = document.createElement("li");
+          listItem.classList.add("list-item");
+          listItem.innerHTML = `<p>${course.name} - ${course.professor}</p><button class="delete-course-btn" data-id="${course.id}">Delete</button>`;
+          coursesList.appendChild(listItem);
+        });
+      }
+
+      // Add functionality to delete comments
+      document
+        .getElementById("comments-list")
+        .addEventListener("click", function (event) {
+          if (event.target.classList.contains("delete-comment-btn")) {
+            var commentId = parseInt(event.target.getAttribute("data-id"));
+            commentsData = commentsData.filter(function (comment) {
+              return comment.id !== commentId;
+            });
+            displayComments();
+          }
+        });
+
+      // Add functionality to delete courses
+      document
+        .getElementById("courses-list")
+        .addEventListener("click", function (event) {
+          if (event.target.classList.contains("delete-course-btn")) {
+            var courseId = parseInt(event.target.getAttribute("data-id"));
+            coursesData = coursesData.filter(function (course) {
+              return course.id !== courseId;
+            });
+            displayCourses();
+          }
+        });
+
+      // Toggle add course section
+      document
+        .getElementById("add-course-toggle-btn")
+        .addEventListener("click", function () {
+          document
+            .getElementById("add-course-section")
+            .classList.toggle("hidden");
+        });
+
+      // Add functionality to add new course
+      document
+        .getElementById("add-course-form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          var courseName = document.getElementById("course-name").value;
+          var professorName = document.getElementById("professor-name").value;
+          var courseId = coursesData.length + 1; // Mock ID generation
+          coursesData.push({
+            id: courseId,
+            name: courseName,
+            professor: professorName,
+          });
+          displayCourses();
+          document.getElementById("add-course-form").reset();
+        });
+    </script>
+  </body>
+</html>

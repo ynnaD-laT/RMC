@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/style.css" />
+    <title>Request Course Page</title>
+
+    <link rel="stylesheet" href="/static/style.css" />
+    <style>
+      .home-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        background-color: rgba(36, 118, 240, 0.932);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .note {
+        display: none;
+        background-color: green;
+        color: white;
+        padding: 20px;
+        border-radius: 4px;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 999;
+      }
+    </style>
+  </head>
+  <body>
+    <img
+      id="Logo"
+      src="{{url_for('static', filename='Logo.jpg')}}"
+      alt="an image of Rate My Course Logo "
+    />
+    <div class="container">
+      <h2>Request Course</h2>
+      <form method = 'POST'>
+      <div>
+        <label for="course_name">Course Name:</label>
+        <input type="text" id="course_name" name="course_name" required />
+      </div>
+
+      <div>
+        <label for="instructor">Instructor:</label>
+        <input type="text" id="instructor" name="instructor" required />
+      </div>
+
+      <div>
+        <label for="department">Department:</label>
+        <input type="text" id="department" name="department" required />
+      </div>
+
+      <div>
+        <label for="contact_email">Your Email:</label>
+        <input type="email" id="contact_email" name="contact_email" required />
+      </div>
+<!-- 
+      Value broke it -->
+      <input type = 'submit'/>
+  
+      </form>
+
+    </div>
+    <button class="home-btn" onclick="goToHomePage()">Home</button>
+      <div id="note" class="note">Thank you for requesting a course!</div>
+
+    <script>
+      function goToHomePage() {
+        window.location.href = "home";
+      }
+
+      document
+        .getElementById("course_request_form")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent default form submission
+          showNote();
+          resetForm();
+        });
+
+      function showNote() {
+        var note = document.getElementById("note");
+        note.style.display = "block";
+        setTimeout(function () {
+          note.style.display = "none";
+        }, 3000);
+      }
+
+      function resetForm() {
+        document.getElementById("course_request_form").reset();
+      }
+    </script>
+
+    
+      
+    </form>
+  </body>
+</html>

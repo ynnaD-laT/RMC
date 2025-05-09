@@ -1,0 +1,88 @@
+/* used in results page but for stars calculating design*/
+/* stores color variables*/
+:root{
+    --secondary: #252549;
+    --text-color: white;
+}
+.app{
+    place-items: center;
+    color: var(--text-color);
+}
+/* Styles for the entire rating container */
+.rating {
+    width: 30vw; /* Reduced the width to 50% of the viewport width */
+    display: flex; /* Flex layout for inner elements */
+    align-items: center; /* Aligns items vertically */
+    column-gap: 2rem; /* Adds space between the inner elements */
+    padding: 1rem; /* Adds padding inside the container */
+    border: 1px solid black; /* Adds a border around the container */
+    border-radius: 1rem; /* Rounds the corners */
+    background-color: var(--secondary); /* Sets the background color */
+    margin-top: 6%;
+    margin-left: 2%;
+}
+.rating_average {
+    width: 25%; /* Reduced the width to 25% of the parent container */
+    background-color: var(--secondary);
+    padding: 1rem;
+    border-radius: 0.8rem;
+    text-align: center;
+}
+.rating_average h1{
+    font-size: 3rem;
+}
+.rating_average .star-outer{
+    position: relative;
+    font-size: 2rem;
+    display: inline-block;
+}
+/* gives star icons*/
+.rating_average .star-outer::before{
+    content: "\2605\2605\2605\2605\2605";
+    color: #fff8;
+}
+.rating_average .star-inner{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    overflow: hidden;
+}
+/* represent average star*/
+.rating_average .star-inner::before{
+    content: "\2605\2605\2605\2605\2605";
+    color: gold;
+}
+.rating_average p{
+    margin-top: .7rem;
+    letter-spacing: .1rem;
+}
+.rating_progress{
+    width: 70%;
+}
+.rating_progress-value{
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    column-gap: 1rem;
+}
+.rating_progress-value .star{
+   font-size: 1.2rem;
+   color: gold;
+}
+.rating_progress-value p:last-child{
+    width: 10%;
+}
+.rating_progress .progress{
+    flex: 1 1 0;
+    height: .5rem;
+    border-radius: .5rem;
+    background-color: #FF02;
+}
+/* styles bar, width -> gives degree*/
+.bar{
+    background-color: gold;
+    border-radius: .5rem;
+    height: 100%;
+} 

@@ -1,0 +1,62 @@
+/* used for index, register, kaan*/
+body {
+    font-family: "Courier New", Courier, monospace;
+    background-color: rgb(151, 208, 241);
+    
+}
+
+#Logo {
+    width: 200px;
+    border-radius: 100px;
+    border: 2px solid #000000;
+    display: block;
+    margin: 20px auto; 
+  }
+h1, h2{
+    text-align: center;
+    color: #003366;
+}
+/* Form styling */
+input[type="email"],
+input[type="password"],
+input[type="name"],
+input[type="text"]
+ {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="submit"] {
+    background-color: rgba(36, 118, 240, 0.932);
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+    
+}
+
+input[type="submit"]:hover {
+    background-color: rgba(36, 118, 240, 0.932);
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 2px solid #000000;
+}
+.account-text{
+    text-align: center;
+}
+label {
+    font-weight: bold;
+  }

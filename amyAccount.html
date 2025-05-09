@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Account</title>
+
+   
+    <style>
+      #Logo {
+        width: 150px;
+        border-radius: 100px;
+        border: 2px solid #000000;
+      }
+      #profilePic {
+        width: 100px;
+        border-radius: 75px;
+        border: 2px solid #000000;
+      }
+      p {
+        border-bottom-style: solid;
+      }
+      .logout {
+        float: right;
+      }
+      body {
+        font-family: "Courier New", Courier, monospace;
+        background-color: rgb(151, 208, 241);
+      }
+      p.solid {
+        border-style: solid;
+        margin-bottom: 1%;
+    }
+      .loggerouter{
+        float: right;
+        
+      }
+
+    </style>
+  </head>
+  <body>
+    <img
+      id="Logo"
+      src="{{url_for('static', filename='Logo.jpg')}}" 
+      alt="an image of Rate My Course Logo "
+    />
+
+    <div class="loggerouter">
+
+    <div class="logout">
+      <a href="logout">Log Out</a>
+    </div>
+    
+    <div class="request course">
+      <a href="request_course">request_course</a>
+    </div>
+
+  </div>
+
+    <! used for solid line>
+    <p class="solid"></p>
+
+    <div class="container">
+      <div class="profile">
+
+          <img src="{{url_for('static', filename='Nerd.png')}}"  alt="Profile Picture" id = "profilePic"/>
+          <h1>{{MainAccount}}</h1>
+          <p>
+            Course
+              {% for cr in courseRecords %}
+              
+                <p>  {{ cr.name }} </p>
+              
+              {% endfor %}
+          </p>
+          
+         <h2>  Location: New York, USA </h2>
+
+
+      </div>
+    </div>
+
+
+
+  </body>
+</html>

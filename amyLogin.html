@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/static/style.css" />
+    <title>Registration Page</title>
+    <style></style>
+  </head>
+  <body>
+    <img
+      id="Logo"
+      src="{{url_for('static', filename='Logo.jpg')}}"
+      alt="an image of Rate My Course Logo "
+    />
+
+    <div class="container">
+      <h1>Sign up</h1>
+      <form>
+        <div>
+          <label for="Username">Username:</label>
+          <input
+            type="text"
+            id="Username"
+            name="Username"
+            placeholder="Ex: Student_ABC123"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="email"> Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Ex: smithj@montclair.edu"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="password"> Password:</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Ex: password123!"
+            maxlength="12"
+            required
+          />
+        </div>
+        <input type="submit" />
+      </form>
+    </div>
+  </body>
+</html>
